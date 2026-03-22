@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: me-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - db-data:/data
+    networks:
+      - me-net
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: me-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - me-net
+    restart: unless-stopped
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  me-net:
+    driver: bridge
